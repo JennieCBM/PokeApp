@@ -85,6 +85,5 @@ grid-column-gap: 2em;
 justify-content: center;
 width: 90%;
 margin: 0 auto;
-list-style: none;
 }
 </style>

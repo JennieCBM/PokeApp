@@ -6,7 +6,6 @@ export const LoadPokemons = async ({commit, state}, url) => {
     try {
       const pokemonListRes = await axios.get(url);
       if (pokemonListRes?.data?.results) {
-          console.log("results",pokemonListRes.data)
           commit('SetNextUrl', pokemonListRes.data.next);
         for (const pokemon of pokemonListRes.data.results) {
           let pokemonObj = {

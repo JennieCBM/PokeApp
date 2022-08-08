@@ -47,7 +47,6 @@ export default {
   },
   mounted() {    
     this.Init();
-    console.log(this.loading);
   },
   created() {
     this.PokemonList = this.GetPokemons

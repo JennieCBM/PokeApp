@@ -79,7 +79,6 @@ export default {
             let favorites = localStorage.getItem('favorites');
             if(favorites){
                 let newFavorites = JSON.parse(favorites);
-                console.log(newFavorites)
                 newFavorites.push(this.pokemon);
                 localStorage.setItem('favorites',[JSON.stringify(newFavorites)]);
 

@@ -64,7 +64,6 @@ export default {
                 this.pokemon = pokemon;
                 this.openModal = true;
                 this.loading = true;
-                console.log(pokemon);
 
             }
         },
