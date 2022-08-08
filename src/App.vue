@@ -7,12 +7,7 @@
                 </div>
             </q-img>
         </div>
-        <q-inner-loading :showing="true">
-            <q-spinner-dots color="primary" size="3em">
-            </q-spinner-dots>
-        </q-inner-loading>
-        <router-view v-if="!loading && !errorDetected" :loading="loading"/>
-
+        <router-view v-if="!errorDetected" :loading="loading"/>
     </div>
 </template>
 
@@ -34,9 +29,13 @@ export default {
     },
     methods: {
         async Init() {
-            await this.LoadConfig();
-            await this.LoadPokemons(`${this.$CONFIG.API_URL}?offset=0&limit=60'`);
-            await this.CheckErrors();
+            try {
+                await this.LoadConfig();
+                await this.LoadPokemons(`${this.$CONFIG.API_URL}?offset=0&limit=60'`);
+                await this.CheckErrors();
+            } finally {
+                this.loading = false;               
+            }
         },
         async LoadConfig() {
             this.loadingConfig = true;
@@ -44,10 +43,8 @@ export default {
                 .then(response => {
                     Vue.prototype.$CONFIG = response.data;
                 });
-            this.loading = false;
         },
         CheckErrors() {
-            console.log(this.error)
             this.errorDetected = this.error;
         },
         ...mapActions('PokemonStore', ['LoadPokemons']),
@@ -64,5 +61,30 @@ export default {
     width: 100vw;
     height: 100vh;
     background-color: black;
+}
+.background {
+background: url('/pexels-vincent-ma-janssen-1310847.jpg') no-repeat center center fixed; 
+background-size: cover;
+overflow: hidden;
+}
+.my-card {
+width: 100%;
+padding: 5px;
+background-color: rgba(56, 61, 70, 0.678);
+}
+.my-card:hover {
+background-color: rgba(56, 61, 70, 0.856);
+box-shadow: 2px 5px 21px 5px rgba(0,0,0,0.64);
+transform: translate(0px, -5px);
+}
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, 250px);
+grid-row-gap: 2em;
+grid-column-gap: 2em;
+justify-content: center;
+width: 90%;
+margin: 0 auto;
+list-style: none;
 }
 </style>

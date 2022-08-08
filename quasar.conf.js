@@ -97,6 +97,7 @@ module.exports = function (/* ctx */) {
       //
       components: [
         'QImg',
+        'QIcon',
         'QItemSection',
         'QItemLabel',
         'QScrollArea',

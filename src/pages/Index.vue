@@ -1,5 +1,11 @@
 <template>
   <q-page class="background">
+    <div class="fixed q-pa-xs">
+      <q-btn round flat size="lg" color="white" icon="favorite" @click="$router.push('/favorites')"/>
+        <q-tooltip>
+          Ver Favoritos
+        </q-tooltip>
+    </div>
       <q-infinite-scroll @load="onLoad" >
           <div class="q-pa-xl full-width grid">
             <pokemon-card 
@@ -41,6 +47,7 @@ export default {
   },
   mounted() {    
     this.Init();
+    console.log(this.loading);
   },
   created() {
     this.PokemonList = this.GetPokemons
@@ -63,11 +70,10 @@ export default {
       }
     },
     async onLoad(index, done) {
-      console.log("onload", this.NextUrl)
-      await this.LoadPokemons(this.NextUrl);
-      done()
-
-
+      if(this.NextUrl && window.pageYOffset > 2000){
+        await this.LoadPokemons(this.NextUrl);
+      }
+      done();
     },
     ...mapActions('PokemonStore',['LoadPokemons'])
 
@@ -90,33 +96,5 @@ export default {
 }
 </script>
 <style>
-  .background {
-    background: url('/pexels-vincent-ma-janssen-1310847.jpg') no-repeat center center fixed; 
-    background-size: cover;
-    overflow: hidden;
-  }
-  .my-card {
-    width: 100%;
-    padding: 5px;
-    background-color: rgba(56, 61, 70, 0.678);
-  }
-  .my-card:hover {
-    background-color: rgba(56, 61, 70, 0.856);
-    box-shadow: 2px 5px 21px 5px rgba(0,0,0,0.64);
-    transform: translate(0px, -5px);
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
-    grid-row-gap: 2em;
-    grid-column-gap: 2em;
-    justify-content: center;
-    width: 90%;
-    margin: 0 auto;
-    list-style: none;
-  }
-  .test {
-    cursor: pointer
-  }
 
 </style>

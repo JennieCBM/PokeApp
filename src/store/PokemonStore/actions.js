@@ -35,8 +35,9 @@ export const LoadPokemons = async ({commit, state}, url) => {
             };
           }
           
-          /* const pokemonDescriptionUrlRes = await axios.get(urlDescription); */
-
+          if(!pokemonObj.image){
+            return;
+          }
           processedPokemons = [...processedPokemons, pokemonObj];
 
         }

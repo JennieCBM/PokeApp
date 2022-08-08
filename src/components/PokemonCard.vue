@@ -3,7 +3,13 @@
       class="my-card "
       bordered
       >
-        <q-img :src="pokemon.image" @click="onClick(pokemon)" class="test">
+      <div class="q-pa-xs absolute" style="z-index:1">
+        <q-btn round dense flat size="md" :color="colorFavoriteIcon" icon="favorite" @click="checkFavorite"/>
+            <q-tooltip>
+                {{colorFavoriteIcon == 'dark'? 'Agregar a Favoritos' : 'Eliminar de Favoritos'}}
+            </q-tooltip>
+        </div>
+        <q-img :src="pokemon.image" @click="onClick" class="pointer">
           <div class="absolute-bottom text-h6">
             {{ pokemon.name}}
           </div>
@@ -41,10 +47,61 @@ export default {
             default: _=> {}
         }
     },
+    data() {
+        return {
+            colorFavoriteIcon: 'dark'
+        }
+    },
+    mounted(){
+        let favorites = localStorage.getItem('favorites');
+        if(favorites){
+            let favoritesParsed = JSON.parse(favorites);
+            favoritesParsed.forEach(favorite=>{
+                if(favorite.id == this.pokemon.id) {
+                    this.colorFavoriteIcon = 'white'
+                };
+            })
+        }
+    },
     methods: {
-        onClick(pokemon){
-            this.$emit('on-pokemon-click',pokemon)
+        onClick() {
+            this.$emit('on-pokemon-click',this.pokemon)
+        },
+        checkFavorite() {
+            if(this.colorFavoriteIcon == 'white'){
+                this.deleteToFavorites();
+            }else{
+                this.addToFavorites();
+            }
+            this.$emit('change-localstorage')
+        },
+        addToFavorites() {
+            let favorites = localStorage.getItem('favorites');
+            if(favorites){
+                let newFavorites = JSON.parse(favorites);
+                console.log(newFavorites)
+                newFavorites.push(this.pokemon);
+                localStorage.setItem('favorites',[JSON.stringify(newFavorites)]);
+
+            }else{
+                let newFavorite = []
+                newFavorite.push(this.pokemon)
+                localStorage.setItem('favorites', JSON.stringify(newFavorite))
+            }
+            this.colorFavoriteIcon = 'white'
+        },
+        deleteToFavorites() {
+            let favorites = localStorage.getItem('favorites');
+            let newFavorites = JSON.parse(favorites);
+            newFavorites = newFavorites.filter(favorite => favorite.id != this.pokemon.id);
+            localStorage.setItem('favorites', JSON.stringify(newFavorites))
+            this.colorFavoriteIcon = 'dark';
         }
     }
 }
 </script>
+<style>
+.pointer {
+  cursor: pointer
+}
+</style>
